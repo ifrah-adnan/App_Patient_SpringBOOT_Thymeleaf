@@ -27,7 +27,7 @@ import java.util.Optional;
 public class PatientController {
     @Autowired
  private PatientRepository patientRepository;
- @GetMapping("/index")
+ @GetMapping("/user/index")
     private String DisplayPatient(Model model , @RequestParam(name = "page" ,defaultValue = "0") int page,@RequestParam(name = "size" ,defaultValue = "5") int size,@RequestParam(name = "keyword",defaultValue = "") String keyword){
      Page<Patient> patients=patientRepository.findByNameContains(keyword,PageRequest.of(page,size));
      model.addAttribute("patients",patients);
@@ -36,33 +36,37 @@ public class PatientController {
      model.addAttribute("keyword",keyword);
      return "patients";
  }
- @GetMapping("/delete")
+ @GetMapping("/admin/delete")
  public String DeletePatient(@RequestParam(name = "id" ,defaultValue = "0") Long id){
   patientRepository.deleteById(id);
-  return "redirect:/index";
+  return "redirect:/user/index";
  }
- @GetMapping ("/formPatients")
+ @GetMapping ("/admin/formPatients")
 public String ShowFormPatient(Model model){
 model.addAttribute("patient",new Patient());
   return "formPatients";
  }
- @PostMapping("/save")
+ @PostMapping("/admin/save")
  public String savePatient( @Valid Patient patient, BindingResult bindingResult,@RequestParam(name = "page" ,defaultValue = "0") int page, @RequestParam(name = "keyword",defaultValue = "0") String keyword) {
      if(bindingResult.hasErrors())return "formPatients";
   System.out.println(patient.getScore());
   System.out.println(patient.getDateNaissance());
   System.out.println(patient.getName());
   patientRepository.save(patient);
-  return "redirect:/index?page="+page+"&keyword="+keyword;
+  return "redirect:/user/index?page="+page+"&keyword="+keyword;
  }
- @GetMapping("/deleteAll")
+ @GetMapping("/")
+ public  String redirect(){
+     return "redirect:/user/index";
+ }
+ @GetMapping("/admin/deleteAll")
  public String SupprimerTOus(Model model){
   patientRepository.deleteAll();
-  return "redirect:/index";
+  return "redirect:/user/index";
 
  }
-@GetMapping("/formupdate")
-public String update(Model model, Long id,@RequestParam(name = "page" ,defaultValue = "0") int page, @RequestParam(name = "keyword",defaultValue = "0") String keyword){
+@GetMapping("/admin/formupdate")
+public String update(Model model, Long id,@RequestParam(name = "page" ,defaultValue = "0") int page, @RequestParam(name = "keyword",defaultValue = "") String keyword){
   Patient patient=patientRepository.findById(id).orElse(null);
   if(patient==null) throw new RuntimeException("Patient introuvable");
   model.addAttribute("patient",patient);

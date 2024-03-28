@@ -25,6 +25,7 @@ public class Patient {
     private String name;
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //or dans app .propreties (spring.mvc.format.date=yyyy-MM-dd)
     private Date dateNaissance;
     private int score;
     private boolean malade;
