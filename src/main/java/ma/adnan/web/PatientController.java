@@ -47,7 +47,7 @@ model.addAttribute("patient",new Patient());
   return "formPatients";
  }
  @PostMapping("/admin/save")
- public String savePatient( @Valid Patient patient, BindingResult bindingResult,@RequestParam(name = "page" ,defaultValue = "0") int page, @RequestParam(name = "keyword",defaultValue = "0") String keyword) {
+ public String savePatient( @Valid Patient patient, BindingResult bindingResult,@RequestParam(name = "page" ,defaultValue = "0") int page, @RequestParam(name = "keyword",defaultValue = "") String keyword) {
      if(bindingResult.hasErrors())return "formPatients";
   System.out.println(patient.getScore());
   System.out.println(patient.getDateNaissance());
